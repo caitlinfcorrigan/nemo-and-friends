@@ -1,19 +1,6 @@
 from django.shortcuts import render
-# Temporary date
-friends = [
-    {'name': 'Nemo',
-     'breed': 'Clownfish',
-     'age': 6,
-     'habitat': 'Anenome'},
-     {'name': 'Marlin',
-     'breed': 'Clownfish',
-     'age': 42,
-     'habitat': 'Anenome'},
-     {'name': 'Dory',
-     'breed': 'Regal Blue Tang',
-     'age': 38,
-     'habitat': 'Coral Reef'}
-]
+
+from .models import Friend
 
 # Create your views here.
 def home(request):
@@ -23,4 +10,9 @@ def about(request):
     return render(request, 'about.html')
 
 def friends_index(request):
+    friends = Friend.objects.all()
     return render(request, 'friends/index.html', {'friends': friends})
+
+def friends_detail(request, friend_id):
+    friend = Friend.objects.get(id=friend_id)
+    return render(request, 'friends/detail.html', { 'friend': friend})

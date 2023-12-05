@@ -4,7 +4,9 @@
 <h1>Friends List</h1>
 {% for friend in friends%}
     <div class="card">
-        <span class="card-title">{{friend.name}}</span>
+        <a href="{% url 'detail' friend.id %}">
+            <span class="card-title">{{friend.name}}</span>
+        </a>
         <p>Age: {{friend.age}}</p>
         <p>Breed: {{friend.breed}}</p>
         <p>Natural habitat: {{friend.habitat}}</p>
