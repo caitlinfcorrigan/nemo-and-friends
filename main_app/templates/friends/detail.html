@@ -9,11 +9,15 @@
         <span class="card-title">{{ friend.name }}</span>
         <p>Breed: {{ friend.breed }}</p>
         {% if friend.age > 18 %}
-            <p>Age: {{ friend.age }} (adult)</p>
+            <p>Age: {{ friend.age }} (Adult)</p>
         {% else %}
-            <p>Age: {{ friend.age }} (youth)</p>
+            <p>Age: {{ friend.age }} (Youth)</p>
         {% endif %}
         <p>Habitat: {{ friend.habitat }}</p>
+    </div>
+    <div>
+        <a href="{% url 'friends_update' friend.id %}">Edit</a>
+        <a href="{% url 'friends_delete' friend.id%}">Delete</a>
     </div>
 </div>
 

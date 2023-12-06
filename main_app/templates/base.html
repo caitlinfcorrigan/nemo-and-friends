@@ -15,11 +15,13 @@
         <nav>
             <div class="nav-wrapper">
                 <ul>
-                    <li><a href="/" class="left brand-logo">&nbsp;&nbsp;Nemo and Friends</a></li>
+                    <li><a href="{% url 'home' %}" class="left brand-logo">&nbsp;&nbsp;Nemo and Friends</a></li>
                 </ul>
                 <ul class="right">
-                    <li><a href="/about">About</a></li>
-                    <li><a href="/friends">View All Friends</a></li>
+                    <!-- Dynamically reference routes using url -->
+                    <li><a href="{% url 'about' %}">About</a></li>
+                    <li><a href="{% url 'friends_create' %}">Add a Friend</a></li>
+                    <li><a href="{% url 'index' %}">View All Friends</a></li>
                 </ul>
             </div>
         </nav>
