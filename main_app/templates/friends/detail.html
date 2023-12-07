@@ -19,6 +19,48 @@
         <a href="{% url 'friends_update' friend.id %}">Edit</a>
         <a href="{% url 'friends_delete' friend.id%}">Delete</a>
     </div>
+    <div class="col s6">
+        <!-- Add form for feeding using custom model form -->
+        <form action="{% url 'add_feeding' friend.id %}" method="POST">
+            {% csrf_token %}
+            <!-- Render the inputs for each field in the form -->
+            {{ feeding_form.as_p }}
+            <input type="submit" class="btn" value="Add Feeding">
+        </form>
+        <!-- Display logic based upon friend.fed_for_today -->
+        <br>
+        {% if friend.fed_for_today %}
+            <div class="card-panel teal-text center-align">{{friend.name}} has been fed all meals for today</div>
+        {% else %}
+            <div class="card-panel red-text center-align">{{friend.name}} might be hungry</div>
+        {% endif %}
+        <table class="striped">
+            <thead>
+                <tr><th>Date</th><th>Meal</th></tr>
+            </thead>
+            <tbody>
+                <!-- To display all of the cat's feedings -->
+                {% for feeding in friend.feeding_set.all %}
+                <tr>
+                    <td>{{feeding.date}}</td>
+                    <td>{{feeding.get_meal_display}}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 </div>
+<script>
+    const dateEl = document.getElementById('id_date');
+    // M is Materialize's global variable
+    M.Datepicker.init(dateEl, {
+      format: 'yyyy-mm-dd',
+      defaultDate: new Date(),
+      setDefaultDate: true,
+      autoClose: true
+    });
+    const selectEl = document.getElementById('id_meal');
+    M.FormSelect.init(selectEl);
+</script>
 
 {% endblock %}

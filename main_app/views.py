@@ -1,7 +1,8 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 
 from .models import Friend
+from .forms import FeedingForm
 
 # Create your views here.
 def home(request):
@@ -16,7 +17,16 @@ def friends_index(request):
 
 def friends_detail(request, friend_id):
     friend = Friend.objects.get(id=friend_id)
-    return render(request, 'friends/detail.html', { 'friend': friend})
+    feeding_form = FeedingForm()
+    return render(request, 'friends/detail.html', { 'friend': friend, 'feeding_form': feeding_form })
+
+def add_feeding(request, friend_id):
+    form = FeedingForm(request.POST)
+    if form.is_valid():
+        new_feeding = form.save(commit=False)
+        new_feeding.friend_id = friend_id
+        new_feeding.save()
+    return redirect('detail', friend_id=friend_id)
 
 class FriendCreate(CreateView):
     model = Friend
