@@ -9,13 +9,40 @@ MEALS = (
     ('L', 'Lunch'),
     ('D', 'Dinner')
 )
+# For Fields.choices in the Decor model
+COLORS = (
+    ('B', 'Blue'),
+    ('R', 'Red'),
+    ('G', 'Green'),
+    ('Y', 'Yellow'),
+    ('O', 'Orange'),
+    ('P', 'Purple'),
+    ('A', 'Gray'),
+    ('M', 'Multi')
+)
 
 # Create your models here.
+class Decor(models.Model):
+    name = models.CharField(max_length=50)
+    color = models.CharField(
+        max_length=1,
+        choices=COLORS,
+        default=COLORS[2][1]
+    )
+    living = models.BooleanField(default=True)
+
+    def __str__(self):
+        return self.name
+
+    def get_absolute_url(self):
+        return reverse('decor_detail', kwargs={'pk': self.id})
+
 class Friend(models.Model):
     name = models.CharField(max_length=20)
     breed = models.CharField(max_length=50)
     age = models.IntegerField()
     habitat = models.CharField(max_length=50)
+    decor = models.ManyToManyField(Decor)
 
     def __str__(self):
         return self.name
