@@ -20,6 +20,10 @@ COLORS = (
     ('A', 'Gray'),
     ('M', 'Multi')
 )
+BOOL = (
+    (True, 'Yes'),
+    (False, 'No')
+)
 
 # Create your models here.
 class Decor(models.Model):
@@ -29,7 +33,10 @@ class Decor(models.Model):
         choices=COLORS,
         default=COLORS[2][1]
     )
-    living = models.BooleanField(default=True)
+    living = models.BooleanField(
+        choices=BOOL,
+        default=True
+    )
 
     def __str__(self):
         return self.name
@@ -52,6 +59,7 @@ class Friend(models.Model):
     
     def fed_for_today(self):
         return self.feeding_set.filter(date=date.today()).count() >= len(MEALS)    
+    
 class Feeding(models.Model):
     date = models.DateField('feeding date')
     # Use MEALS tuple to create drop-down in forms

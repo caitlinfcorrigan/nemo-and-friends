@@ -1,10 +1,11 @@
 from django.shortcuts import render, redirect
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
+from django.views.generic import ListView, DetailView
 
-from .models import Friend
+from .models import Friend, Decor
 from .forms import FeedingForm
 
-# Create your views here.
+# Create your views here.def home(request):
 def home(request):
     return render(request, 'home.html')
 
@@ -28,9 +29,27 @@ def add_feeding(request, friend_id):
         new_feeding.save()
     return redirect('detail', friend_id=friend_id)
 
+class DecorList(ListView):
+  model = Decor
+
+class DecorDetail(DetailView):
+  model = Decor
+
+class DecorCreate(CreateView):
+  model = Decor
+  fields = '__all__'
+
+class DecorUpdate(UpdateView):
+  model = Decor
+  fields = ['name', 'color']
+
+class DecorDelete(DeleteView):
+  model = Decor
+  success_url = '/decor'
+
 class FriendCreate(CreateView):
     model = Friend
-    fields = '__all__'
+    fields = ['name', 'breed', 'age', 'habitat']
 
 class FriendUpdate(UpdateView):
     model = Friend

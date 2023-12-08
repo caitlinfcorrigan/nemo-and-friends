@@ -9,6 +9,7 @@
         <div class="card-content">
             <span class="card-title">{{ decor.name }}</span>
             <p>Color: {{ decor.color }}</p>
+            <p>Living: {{ decor.living }}</p>
         </div>
         <div class="card-action">
             <a href="{% url 'decor_update' decor.id %}">Edit</a>
