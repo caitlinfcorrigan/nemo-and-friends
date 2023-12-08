@@ -4,21 +4,25 @@
 
 <h1>Friend Details</h1>
 
-<div class="card">
-    <div class="card-content">
-        <span class="card-title">{{ friend.name }}</span>
-        <p>Breed: {{ friend.breed }}</p>
-        {% if friend.age > 18 %}
-            <p>Age: {{ friend.age }} (Adult)</p>
-        {% else %}
-            <p>Age: {{ friend.age }} (Youth)</p>
-        {% endif %}
-        <p>Habitat: {{ friend.habitat }}</p>
-    </div>
-    <div>
-        <a href="{% url 'friends_update' friend.id %}">Edit</a>
-        <a href="{% url 'friends_delete' friend.id%}">Delete</a>
-    </div>
+<div class="row">
+    <div class="col s6">
+        <div class="card">
+            <div class="card-content">
+                <span class="card-title">{{ friend.name }}</span>
+                <p>Breed: {{ friend.breed }}</p>
+                {% if friend.age > 18 %}
+                    <p>Age: {{ friend.age }} (Adult)</p>
+                {% else %}
+                    <p>Age: {{ friend.age }} (Youth)</p>
+                {% endif %}
+                <p>Habitat: {{ friend.habitat }}</p>
+            </div>
+            <div>
+                <a href="{% url 'friends_update' friend.id %}">Edit</a>
+                <a href="{% url 'friends_delete' friend.id%}">Delete</a>
+            </div>
+        </div>
+    </div>    
     <div class="col s6">
         <!-- Add form for feeding using custom model form -->
         <form action="{% url 'add_feeding' friend.id %}" method="POST">
@@ -39,7 +43,7 @@
                 <tr><th>Date</th><th>Meal</th></tr>
             </thead>
             <tbody>
-                <!-- To display all of the cat's feedings -->
+                <!-- To display all of the friend's feedings -->
                 {% for feeding in friend.feeding_set.all %}
                 <tr>
                     <td>{{feeding.date}}</td>
@@ -49,7 +53,54 @@
             </tbody>
         </table>
     </div>
-</div>
+    <hr>
+    <div class="row">
+    <div class="col s6">
+        <h3>{{ friend.name }}'s Decor</h3>
+        {% if friend.decor.count %}
+        {% for d in friend.decor.all %}
+            <div class="card">
+                <div class="card-content">
+                    <span class="card-title">
+                    A <span style="color: {{ d.color }}">{{ d.color }}</span> {{ d.name }}
+                    </span>
+                </div>
+                <div class="card-action">
+                    <form action="{% url 'unassoc_decor' friend.id d.id %}" method="DELETE">
+                      {% csrf_token %}
+                      <button type="submit" class="btn">Delete</button>
+                    </form>
+                  </div>
+            </div>
+        {% endfor %}
+        {% else %}
+        <h5>No Decor 😿</h5>
+        {% endif %}
+    </div>
+    <div class="col s6">
+        <h3>Available Decor</h3>
+        {% if decor.count %}
+          {% for d in decor.all %}
+            <div class="card">
+              <div class="card-content">
+                <span class="card-title">
+                 {{ d.name }}
+                </span>
+              </div>
+              <div class="card-action">
+                <form action="{% url 'assoc_decor' friend.id d.id %}" method="POST">
+                  {% csrf_token %}
+                  <button type="submit" class="btn">Add</button>
+                </form>
+              </div>
+            </div>
+          {% endfor %}
+        {% else %}
+          <h5>{{friend.name}} Already Has All Available Decor</h5>
+        {% endif %} 
+        </div>
+    </div>
+</div>            
 <script>
     const dateEl = document.getElementById('id_date');
     // M is Materialize's global variable

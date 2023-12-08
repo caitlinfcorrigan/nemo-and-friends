@@ -19,7 +19,9 @@ def friends_index(request):
 def friends_detail(request, friend_id):
     friend = Friend.objects.get(id=friend_id)
     feeding_form = FeedingForm()
-    return render(request, 'friends/detail.html', { 'friend': friend, 'feeding_form': feeding_form })
+    id_list = friend.decor.all().values_list('id')
+    decor_friend_doesnt_have = Decor.objects.exclude(id__in=id_list)
+    return render(request, 'friends/detail.html', { 'friend': friend, 'feeding_form': feeding_form, 'decor': decor_friend_doesnt_have })
 
 def add_feeding(request, friend_id):
     form = FeedingForm(request.POST)
@@ -28,6 +30,14 @@ def add_feeding(request, friend_id):
         new_feeding.friend_id = friend_id
         new_feeding.save()
     return redirect('detail', friend_id=friend_id)
+
+def assoc_decor(request, friend_id, decor_id):
+   Friend.objects.get(id=friend_id).decor.add(decor_id)
+   return redirect('detail', friend_id=friend_id)
+
+def unassoc_decor(request, friend_id, decor_id):
+   Friend.objects.get(id=friend_id).decor.remove(decor_id)
+   return redirect('detail', friend_id=friend_id)
 
 class DecorList(ListView):
   model = Decor
